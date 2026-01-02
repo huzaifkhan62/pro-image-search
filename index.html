@@ -1,1 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pro Vision | AI Image Search</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1 class="logo">PRO<span>VISION</span></h1>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Search HD Wallpapers, Anime, Art...">
+                <button id="searchBtn">🔍</button>
+            </div>
+            <div class="categories">
+                <button onclick="searchCategory('Nature')">Nature</button>
+                <button onclick="searchCategory('Anime')">Anime</button>
+                <button onclick="searchCategory('Cars')">Cars</button>
+                <button onclick="searchCategory('Space')">Space</button>
+            </div>
+        </header>
+
+        <main id="imageGrid" class="image-grid">
+            <div class="loader">Search something amazing...</div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js');
+        }
+    </script>
+</body>
+</html>
 
