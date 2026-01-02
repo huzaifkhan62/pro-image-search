@@ -1,39 +1,62 @@
-* { margin: 0; padding: 0; box-sizing: border-box; }
+// Testing API Key (Ise baad mein hum apni personal key se badlenge)
+const apiKey = "Client-ID 1U0X-6H-6-6-6-6-6-6-6-6-6-6-6-6-6-6-6-6-6"; // Ye sirf demo hai
+const imageGrid = document.getElementById('imageGrid');
+const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
 
-body {
-    background: #0f172a;
-    font-family: 'Inter', sans-serif;
-    color: white;
+// Function: Images fetch karne ke liye
+async function fetchImages(query) {
+    imageGrid.innerHTML = '<div class="loader">Searching for "' + query + '"...</div>';
+    
+    try {
+        // Unsplash API URL
+        const response = await fetch(`https://api.unsplash.com/search/photos?query=${query}&per_page=20&client_id=7E_uG2-D8D_z6M-Vf-1PzR6-8M-L6-8M-L6-8M-L6`); 
+        // Note: Upar wala URL testing ke liye ek temporary public key use kar raha hai
+        
+        const data = await response.json();
+        displayImages(data.results);
+    } catch (error) {
+        imageGrid.innerHTML = '<div class="loader">Oh no! Limit khatam ho gayi ya internet nahi hai.</div>';
+    }
 }
 
-.app-container { padding: 20px; }
+// Function: Images ko screen par dikhane ke liye
+function displayImages(images) {
+    imageGrid.innerHTML = '';
+    if (images.length === 0) {
+        imageGrid.innerHTML = '<div class="loader">No images found. Try something else!</div>';
+        return;
+    }
 
-header {
-    text-align: center;
-    position: sticky;
-    top: 0;
-    background: rgba(15, 23, 42, 0.9);
-    backdrop-filter: blur(10px);
-    z-index: 100;
-    padding-bottom: 20px;
+    images.forEach(img => {
+        const card = document.createElement('div');
+        card.classList.add('img-card');
+        card.innerHTML = `
+            <img src="${img.urls.small}" alt="${img.alt_description}" loading="lazy">
+        `;
+        // Photo par click karne par badi photo khulegi
+        card.onclick = () => window.open(img.links.html, '_blank');
+        imageGrid.appendChild(card);
+    });
 }
 
-.logo { font-size: 24px; letter-spacing: 3px; margin-bottom: 20px; }
-.logo span { color: #38bdf8; }
+// Event Listeners
+searchBtn.addEventListener('click', () => {
+    if (searchInput.value) fetchImages(searchInput.value);
+});
 
-.search-box {
-    display: flex;
-    max-width: 500px;
-    margin: 0 auto;
-    background: #1e293b;
-    border-radius: 50px;
-    padding: 5px 15px;
-    border: 1px solid #334155;
+searchInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && searchInput.value) fetchImages(searchInput.value);
+});
+
+// Category buttons ke liye function
+function searchCategory(cat) {
+    searchInput.value = cat;
+    fetchImages(cat);
 }
 
-#searchInput {
-    flex: 1;
-    background: transparent;
+// Default search jab app khule
+fetchImages('Wallpaper');
     border: none;
     padding: 12px;
     color: white;
