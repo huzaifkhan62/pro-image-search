@@ -32,10 +32,12 @@ async function fetchImages(query, isNewSearch = true) {
             // 2. Download Button Feature
             card.innerHTML = `
                 <img src="${img.urls.small}" alt="${query}">
-                <button class="download-btn" onclick="downloadImage('${img.links.download_location}')">
+                <button class="download-btn" onclick="event.stopPropagation(); downloadImage('${img.links.download_location}')">
                     ⬇️
                 </button>
             `;
+            card.querySelector('img').onclick = () => window.open(img.urls.regular, '_blank');
+            
             imageGrid.appendChild(card);
         });
         page++;
@@ -46,25 +48,29 @@ async function fetchImages(query, isNewSearch = true) {
 
 // 3. Download Function (Unsplash requirement)
 async function downloadImage(downloadUrl) {
-    const res = await fetch(`${downloadUrl}&client_id=${clientID}`);
-    const data = await res.json();
-    window.open(data.url, '_blank');
-}
-
-// 4. Infinite Scroll Feature
-window.onscroll = function() {
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
-        fetchImages(currentQuery, false);
+    try {
+        // 1. Pehle Unsplash ko batate hain ki hum download kar rahe hain (Zaruri hai)
+        const res = await fetch(`${downloadUrl}&client_id=${clientID}`);
+        const data = await res.json();
+        
+        // 2. Ab asli image file ko fetch karte hain
+        const imageRes = await fetch(data.url);
+        const imageBlob = await imageRes.blob();
+        
+        // 3. Ek temporary link banakar download trigger karte hain
+        const url = window.URL.createObjectURL(imageBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ProVision_${Math.floor(Math.random() * 1000)}.jpg`;
+        document.body.appendChild(a);
+        a.click();
+        
+        // 4. Safai (Cleanup)
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        alert("Download fail ho gaya, dobara try karein!");
     }
-};
-
-searchBtn.addEventListener('click', () => {
-    if (searchInput.value) fetchImages(searchInput.value);
-});
-
-window.onload = () => fetchImages('Nature');
-function searchCategory(cat) {
-    searchInput.value = cat;
-    fetchImages(cat, true);
 }
+
 
