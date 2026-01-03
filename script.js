@@ -1,37 +1,39 @@
-console.log("Version 2.0 Loaded");
 const imageGrid = document.getElementById('imageGrid');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 
-// Ye ek active public key hai testing ke liye
+// Aapki apni personal Access Key
 const clientID = '4YxTJUl5nDaPX6dKW3tGrXJDfLgScFgjxcwWUlNfpdM'; 
 
 async function fetchImages(query) {
     imageGrid.innerHTML = '<div class="loader">Searching for ' + query + '...</div>';
     
     try {
-        // Ab hum real Unsplash Search API use kar rahe hain
-        const response = await fetch(`https://api.unsplash.com/search/photos?query=${query}&per_page=20&client_id=R_z6M-Vf-1PzR6-8M-L6-8M-L6-8M-L6`);
+        // Is line ko dhyan se dekho, ab ye upar wali clientID use karega
+        const response = await fetch(`https://api.unsplash.com/search/photos?query=${query}&per_page=20&client_id=${clientID}`);
         const data = await response.json();
         
         imageGrid.innerHTML = ''; 
         
+        if(data.results.length === 0) {
+            imageGrid.innerHTML = '<div class="loader">No images found. Try another word!</div>';
+            return;
+        }
+
         data.results.forEach(img => {
             const card = document.createElement('div');
             card.classList.add('img-card');
             
-            // Isse click karne par wahi image khulegi jo dikh rahi hai
             const highResUrl = img.urls.regular; 
             const thumbUrl = img.urls.small;
 
             card.innerHTML = `<img src="${thumbUrl}" alt="${query}" style="width:100%; height:100%; object-fit:cover;">`;
             
-            // Perfect Click: Wahi image badi screen par khulegi
             card.onclick = () => window.open(highResUrl, '_blank');
             imageGrid.appendChild(card);
         });
     } catch (error) {
-        imageGrid.innerHTML = '<div class="loader">Limit full ho gayi hai, thodi der baad try karein.</div>';
+        imageGrid.innerHTML = '<div class="loader">Something went wrong. Please check your internet.</div>';
     }
 }
 
@@ -44,5 +46,4 @@ function searchCategory(cat) {
     fetchImages(cat);
 }
 
-// App khulte hi 'Nature' ki real images dikhayega
 window.onload = () => fetchImages('Nature');
