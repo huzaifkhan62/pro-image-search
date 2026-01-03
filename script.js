@@ -1,3 +1,4 @@
+console.log("Version 2.0 Loaded");
 const imageGrid = document.getElementById('imageGrid');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
