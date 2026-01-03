@@ -1,49 +1,65 @@
 const imageGrid = document.getElementById('imageGrid');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
+const checkbox = document.getElementById('checkbox');
 
-// Aapki apni personal Access Key
-const clientID = '4YxTJUl5nDaPX6dKW3tGrXJDfLgScFgjxcwWUlNfpdM'; 
+let currentQuery = 'Nature';
+let page = 1;
+const clientID = '4YxTJUl5nDaPX6dKW3tGrXJDfLgScFgjxcwWUlNfpdM'; // Apni key yahan check karlein
 
-async function fetchImages(query) {
-    imageGrid.innerHTML = '<div class="loader">Searching for ' + query + '...</div>';
-    
+// 1. Dark Mode Feature
+checkbox.addEventListener('change', () => {
+    document.body.classList.toggle('light-theme');
+});
+
+async function fetchImages(query, isNewSearch = true) {
+    if (isNewSearch) {
+        page = 1;
+        imageGrid.innerHTML = '<div class="loader">Searching...</div>';
+        currentQuery = query;
+    }
+
     try {
-        // Is line ko dhyan se dekho, ab ye upar wali clientID use karega
-        const response = await fetch(`https://api.unsplash.com/search/photos?query=${query}&per_page=20&client_id=${clientID}`);
+        const response = await fetch(`https://api.unsplash.com/search/photos?query=${query}&per_page=12&page=${page}&client_id=${clientID}`);
         const data = await response.json();
-        
-        imageGrid.innerHTML = ''; 
-        
-        if(data.results.length === 0) {
-            imageGrid.innerHTML = '<div class="loader">No images found. Try another word!</div>';
-            return;
-        }
+
+        if (isNewSearch) imageGrid.innerHTML = '';
 
         data.results.forEach(img => {
             const card = document.createElement('div');
             card.classList.add('img-card');
             
-            const highResUrl = img.urls.regular; 
-            const thumbUrl = img.urls.small;
-
-            card.innerHTML = `<img src="${thumbUrl}" alt="${query}" style="width:100%; height:100%; object-fit:cover;">`;
-            
-            card.onclick = () => window.open(highResUrl, '_blank');
+            // 2. Download Button Feature
+            card.innerHTML = `
+                <img src="${img.urls.small}" alt="${query}">
+                <button class="download-btn" onclick="downloadImage('${img.links.download_location}')">
+                    ⬇️
+                </button>
+            `;
             imageGrid.appendChild(card);
         });
+        page++;
     } catch (error) {
-        imageGrid.innerHTML = '<div class="loader">Something went wrong. Please check your internet.</div>';
+        console.log("Error fetching images");
     }
 }
+
+// 3. Download Function (Unsplash requirement)
+async function downloadImage(downloadUrl) {
+    const res = await fetch(`${downloadUrl}&client_id=${clientID}`);
+    const data = await res.json();
+    window.open(data.url, '_blank');
+}
+
+// 4. Infinite Scroll Feature
+window.onscroll = function() {
+    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+        fetchImages(currentQuery, false);
+    }
+};
 
 searchBtn.addEventListener('click', () => {
     if (searchInput.value) fetchImages(searchInput.value);
 });
-
-function searchCategory(cat) {
-    searchInput.value = cat;
-    fetchImages(cat);
-}
 
 window.onload = () => fetchImages('Nature');
