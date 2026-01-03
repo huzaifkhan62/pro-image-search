@@ -6,7 +6,7 @@ const checkbox = document.getElementById('checkbox');
 let currentQuery = 'Nature';
 let page = 1;
 // Aapki active Unsplash Access Key
-const clientID = '4YxTJU15nDaPX6dKW3tGrXJDfLgScFgjxcv9_V9WfO8'; 
+const clientID = '4YxTJUl5nDaPX6dKW3tGrXJDfLgScFgjxcwWUlNfpdM'; 
 
 // 1. Dark Mode Feature
 checkbox.addEventListener('change', () => {
