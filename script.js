@@ -2,42 +2,37 @@ const imageGrid = document.getElementById('imageGrid');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 
-// Function: Images fetch karne ke liye
 function fetchImages(query) {
     // Loader dikhao
-    imageGrid.innerHTML = '<div class="loader">Searching for ' + query + '...</div>';
+    imageGrid.innerHTML = '<div class="loader">Loading ' + query + ' images...</div>';
     
     setTimeout(() => {
-        imageGrid.innerHTML = ''; // Loader hatao
+        imageGrid.innerHTML = ''; 
         
-        // 15 Random images load karenge
         for (let i = 0; i < 15; i++) {
             const card = document.createElement('div');
             card.classList.add('img-card');
             
-            // Lorem Picsum ka direct link (Testing ke liye best hai)
-            const randomID = Math.floor(Math.random() * 1000);
-            const imageUrl = `https://picsum.photos/seed/${randomID}/400/600`;
+            // Naya aur fast link testing ke liye
+            const randomID = Math.floor(Math.random() * 500) + i;
+            const imageUrl = `https://picsum.photos/400/600?random=${randomID}`;
             
-            card.innerHTML = `<img src="${imageUrl}" alt="Image" loading="lazy">`;
+            card.innerHTML = `<img src="${imageUrl}" alt="AI Image" style="width:100%; height:100%; object-fit:cover;">`;
             
-            // Photo badi karne ke liye
             card.onclick = () => window.open(imageUrl, '_blank');
             imageGrid.appendChild(card);
         }
-    }, 800);
+    }, 500);
 }
 
-// Search Button
 searchBtn.addEventListener('click', () => {
     if (searchInput.value) fetchImages(searchInput.value);
 });
 
-// Category Buttons
 function searchCategory(cat) {
     searchInput.value = cat;
     fetchImages(cat);
 }
 
-// App khulte hi images load hon
+// App khulte hi dikhao
 window.onload = () => fetchImages('Latest');
