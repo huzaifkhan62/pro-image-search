@@ -2,49 +2,42 @@ const imageGrid = document.getElementById('imageGrid');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 
-// Function: Images dikhane ke liye (Source tarika)
+// Function: Images fetch karne ke liye
 function fetchImages(query) {
+    // Loader dikhao
     imageGrid.innerHTML = '<div class="loader">Searching for ' + query + '...</div>';
     
-    // Purani images saaf karo
     setTimeout(() => {
-        imageGrid.innerHTML = '';
+        imageGrid.innerHTML = ''; // Loader hatao
         
-        // Hum 12 random images generate karenge query ke basis par
-        for (let i = 0; i < 12; i++) {
+        // 15 Random images load karenge
+        for (let i = 0; i < 15; i++) {
             const card = document.createElement('div');
             card.classList.add('img-card');
             
-            // Random number taaki har image alag dikhe
-            const randomNum = Math.floor(Math.random() * 1000) + i;
-            const imageUrl = `https://source.unsplash.com/featured/?${query}&sig=${randomNum}`;
+            // Lorem Picsum ka direct link (Testing ke liye best hai)
+            const randomID = Math.floor(Math.random() * 1000);
+            const imageUrl = `https://picsum.photos/seed/${randomID}/400/600`;
             
-            card.innerHTML = `
-                <img src="${imageUrl}" alt="${query}" onerror="this.src='https://via.placeholder.com/300?text=Error+Loading'">
-            `;
+            card.innerHTML = `<img src="${imageUrl}" alt="Image" loading="lazy">`;
             
-            // Click karne par image badi dikhegi
+            // Photo badi karne ke liye
             card.onclick = () => window.open(imageUrl, '_blank');
             imageGrid.appendChild(card);
         }
-    }, 500);
+    }, 800);
 }
 
-// Button click par search
+// Search Button
 searchBtn.addEventListener('click', () => {
     if (searchInput.value) fetchImages(searchInput.value);
 });
 
-// Enter dabane par search
-searchInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' && searchInput.value) fetchImages(searchInput.value);
-});
-
-// Category buttons ke liye
+// Category Buttons
 function searchCategory(cat) {
     searchInput.value = cat;
     fetchImages(cat);
 }
 
-// App khulte hi 'Nature' load ho
-window.onload = () => fetchImages('Nature');
+// App khulte hi images load hon
+window.onload = () => fetchImages('Latest');
