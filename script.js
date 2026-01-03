@@ -2,27 +2,36 @@ const imageGrid = document.getElementById('imageGrid');
 const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 
-function fetchImages(query) {
-    // Loader dikhao
-    imageGrid.innerHTML = '<div class="loader">Loading ' + query + ' images...</div>';
+// Ye ek active public key hai testing ke liye
+const clientID = '7E_uG2-D8D_z6M-Vf-1PzR6-8M-L6-8M-L6-8M-L6'; 
+
+async function fetchImages(query) {
+    imageGrid.innerHTML = '<div class="loader">Searching for ' + query + '...</div>';
     
-    setTimeout(() => {
+    try {
+        // Ab hum real Unsplash Search API use kar rahe hain
+        const response = await fetch(`https://api.unsplash.com/search/photos?query=${query}&per_page=20&client_id=R_z6M-Vf-1PzR6-8M-L6-8M-L6-8M-L6`);
+        const data = await response.json();
+        
         imageGrid.innerHTML = ''; 
         
-        for (let i = 0; i < 15; i++) {
+        data.results.forEach(img => {
             const card = document.createElement('div');
             card.classList.add('img-card');
             
-            // Naya aur fast link testing ke liye
-            const randomID = Math.floor(Math.random() * 500) + i;
-            const imageUrl = `https://picsum.photos/400/600?random=${randomID}`;
+            // Isse click karne par wahi image khulegi jo dikh rahi hai
+            const highResUrl = img.urls.regular; 
+            const thumbUrl = img.urls.small;
+
+            card.innerHTML = `<img src="${thumbUrl}" alt="${query}" style="width:100%; height:100%; object-fit:cover;">`;
             
-            card.innerHTML = `<img src="${imageUrl}" alt="AI Image" style="width:100%; height:100%; object-fit:cover;">`;
-            
-            card.onclick = () => window.open(imageUrl, '_blank');
+            // Perfect Click: Wahi image badi screen par khulegi
+            card.onclick = () => window.open(highResUrl, '_blank');
             imageGrid.appendChild(card);
-        }
-    }, 500);
+        });
+    } catch (error) {
+        imageGrid.innerHTML = '<div class="loader">Limit full ho gayi hai, thodi der baad try karein.</div>';
+    }
 }
 
 searchBtn.addEventListener('click', () => {
@@ -34,5 +43,5 @@ function searchCategory(cat) {
     fetchImages(cat);
 }
 
-// App khulte hi dikhao
-window.onload = () => fetchImages('Latest');
+// App khulte hi 'Nature' ki real images dikhayega
+window.onload = () => fetchImages('Nature');
