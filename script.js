@@ -4,7 +4,7 @@ const searchInput = document.getElementById('searchInput');
 const searchBtn = document.getElementById('searchBtn');
 
 // Ye ek active public key hai testing ke liye
-const clientID = '7E_uG2-D8D_z6M-Vf-1PzR6-8M-L6-8M-L6-8M-L6'; 
+const clientID = '4YxTJUl5nDaPX6dKW3tGrXJDfLgScFgjxcwWUlNfpdM'; 
 
 async function fetchImages(query) {
     imageGrid.innerHTML = '<div class="loader">Searching for ' + query + '...</div>';
