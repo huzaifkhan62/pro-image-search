@@ -93,3 +93,12 @@ function searchCategory(cat) {
 
 // Default search jab app khule
 window.onload = () => fetchImages('Nature');
+// Splash Screen Timer: 3 second baad screen hatane ke liye
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        if (splash) {
+            splash.classList.add('hidden');
+        }
+    }, 3000); 
+});
