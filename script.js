@@ -63,3 +63,8 @@ searchBtn.addEventListener('click', () => {
 });
 
 window.onload = () => fetchImages('Nature');
+function searchCategory(cat) {
+    searchInput.value = cat;
+    fetchImages(cat, true);
+}
+
