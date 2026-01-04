@@ -75,6 +75,22 @@ async function fetchImages(query, isNewSearch = true) {
             `;
             card.querySelector('img').onclick = () => window.open(img.urls.regular, '_blank');
             imageGrid.appendChild(card);
+                  // ❤️ Save Button Code
+        const saveBtn = document.createElement('button');
+        saveBtn.innerHTML = '❤️ Save';
+        saveBtn.classList.add('save-btn'); // Ise baad mein style karenge
+        saveBtn.onclick = (e) => {
+            e.stopPropagation(); // Image click se bachne ke liye
+            let saved = JSON.parse(localStorage.getItem('favImages')) || [];
+            if(!saved.includes(img.urls.small)) {
+                saved.push(img.urls.small);
+                localStorage.setItem('favImages', JSON.stringify(saved));
+                alert('Photo saved to Favorites! ❤️');
+            } else {
+                alert('Ye pehle se saved hai!');
+            }
+        };
+        card.appendChild(saveBtn);
         });
         page++;
     } catch (error) { console.error("Error:", error); }
@@ -113,4 +129,18 @@ searchBtn.addEventListener('click', () => {
 window.searchCategory = (cat) => { 
     searchInput.value = cat; 
     fetchImages(cat, true); 
+};
+window.showMyFavs = () => {
+    const saved = JSON.parse(localStorage.getItem('favImages')) || [];
+    if (saved.length === 0) {
+        alert("Aapne abhi tak koi photo save nahi ki!");
+        return;
+    }
+    imageGrid.innerHTML = '<h2 style="color:white; width:100%; text-align:center; grid-column: 1/-1;">My Favorites ❤️</h2>';
+    saved.forEach(url => {
+        const card = document.createElement('div');
+        card.classList.add('img-card');
+        card.innerHTML = `<img src="${url}">`;
+        imageGrid.appendChild(card);
+    });
 };
