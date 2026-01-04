@@ -1,0 +1,16 @@
+{
+  "name": "Pro Vision",
+  "short_name": "ProVision",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00d4ff",
+  "description": "AI Image Search Engine by Huzaif Khan",
+  "icons": [
+    {
+      "src": "https://i.ibb.co/3mS0X9S/pro-vision-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
