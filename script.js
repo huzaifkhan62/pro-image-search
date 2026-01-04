@@ -4,7 +4,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, on
 
 // 2. Aapka Naya Firebase Config
 const firebaseConfig = {
-  apiKey: "4YxTJUl5nDaPX6dKW3tGrXJDfLgScFgjxcwWUlNfpdM",
+  apiKey: "AIzaSyA4EzDXRfJfmzJp5GfDeetT-JH4rfC-IAs",
   authDomain: "pro-vision-app.firebaseapp.com",
   projectId: "pro-vision-app",
   storageBucket: "pro-vision-app.firebasestorage.app",
