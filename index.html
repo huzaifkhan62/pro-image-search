@@ -14,8 +14,22 @@
         <p class="created-by">Created by <span>HUZAIFKHAN</span></p>
     </div>
     </div>
-    
-    <div class="app-container">
+    <div id="auth-overlay">
+    <div class="auth-box">
+        <h2>Welcome to <span>Pro Vision</span></h2>
+        <div class="auth-inputs">
+            <input type="email" id="emailInput" placeholder="Email Address">
+            <input type="password" id="passwordInput" placeholder="Password (min 6 chars)">
+        </div>
+        <div class="auth-buttons">
+            <button id="loginBtn">Login</button>
+            <button id="signupBtn" class="secondary">Sign Up</button>
+        </div>
+        <p id="authError"></p>
+        <button id="logoutBtn" style="display:none;">Logout</button>
+    </div>
+    </div>
+    <div class="app-container" id="main-app" style="display: none;">
         <header>
             <div class="theme-switch-wrapper" style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
     <input type="checkbox" id="checkbox" style="width:20px; height:20px; cursor:pointer;">
