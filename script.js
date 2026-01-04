@@ -94,15 +94,23 @@ async function downloadImage(downloadUrl) {
         a.click();
     } catch (e) { alert("Download failed!"); }
 }
-
-// 9. Splash Screen Timer (3 Seconds)
+// 9. Splash Screen Timer (Ye alag hona chahiye, kisi function ke andar nahi)
 window.addEventListener('load', () => {
     setTimeout(() => {
         const splash = document.getElementById('splash-screen');
-        if (splash) splash.classList.add('hidden');
+        if (splash) {
+            splash.classList.add('hidden');
+            console.log("Splash hidden now");
+        }
     }, 3000);
 });
 
 // 10. Search & Categories functionality
-searchBtn.addEventListener('click', () => { if(searchInput.value) fetchImages(searchInput.value); });
-window.searchCategory = (cat) => { searchInput.value = cat; fetchImages(cat, true); };
+searchBtn.addEventListener('click', () => { 
+    if(searchInput.value) fetchImages(searchInput.value); 
+});
+
+window.searchCategory = (cat) => { 
+    searchInput.value = cat; 
+    fetchImages(cat, true); 
+};
